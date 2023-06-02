@@ -2,10 +2,11 @@
 import { useForm } from "react-hook-form";
 import validator from "validator";
 const GoodForm = () => {
-  const {register, handleSubmit, formState: {errors}} = useForm()
+  const {register, handleSubmit, formState: {errors}, watch} = useForm()
   const onSubmit = (data) => {
     console.log(data)
   };
+  const watchPassword = watch('password')
   return (
     <div className="app-container">
       <div className="form-group">
@@ -48,6 +49,18 @@ const GoodForm = () => {
         />
         {(errors?.password?.type === 'required' && <p className="error-message">Campo obrigatório</p>) 
         || (errors?.password?.type === 'minLength' && <p className="error-message">O mínimo de caracteres é 7</p>)}
+      </div>
+
+      <div className="form-group">
+        <label>Confirmar senha</label>
+        <input
+          // className={errors?.password && "input-error"}
+          type="password"
+          placeholder="Digite sua senha novamente"
+          {...register("confirmPassword", {required: true, validate: (value) => value === watchPassword})}
+        />
+        {(errors?.confirmPassword?.type === 'required' && <p className="error-message">Campo obrigatório</p>) 
+        || (errors?.confirmPassword?.type === 'validate' && <p className="error-message">As senhas são diferentes</p>)}
       </div>
 
       <div className="form-group">
